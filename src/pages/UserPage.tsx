@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getAllUseres } from "../services/userServices";
+import {
+  createUser,
+  deleteUserById,
+  getAllUseres,
+} from "../services/userServices";
 
 interface User {
   id: string;
@@ -49,6 +53,45 @@ const UserPage: React.FC = () => {
       ...prev,
       [name]: name === "age" ? parseInt(value) || 0 : value,
     }));
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newUser.firstsname || !newUser.lastname || newUser.age <= 0) {
+      return alert("Mohono melengkapidata pengguna dengan benaar");
+    }
+
+    try {
+      setLoading(true);
+      const message = await createUser(newUser);
+      alert(message);
+
+      const updateUsers = await getAllUseres();
+      setUsers(updateUsers);
+      setNewUser({ firstsname: "", lastname: "", age: 0 });
+      setError(null);
+    } catch (err) {
+      setError(err.message || "Terjadi kesalahan saat menambahkan pengguna.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async (id: string) => {
+    if (window.confirm("Apakah anda yakin ingin menghapus pengguna ini ?")) {
+      try {
+        setLoading(true);
+        const message = await deleteUserById(id);
+        alert(message);
+
+        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+        setError(null);
+      } catch (err) {
+        setError(err.message || "Terjadi kesalahan saat menghapus pengguna.");
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   return <div>UserPage</div>;
