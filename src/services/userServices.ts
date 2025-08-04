@@ -25,3 +25,26 @@ export const getAllUseres = async (): Promise<User[]> => {
     throw error;
   }
 };
+
+export const createUser = (user: Omit<User, "id">): Promise<string> => {
+  try {
+    const response = await fetch(API_BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Gagal menambahkan pengguna");
+    }
+
+    const message = await response.json();
+    return message;
+  } catch (erorr) {
+    console.error("Error createing user : ", erorr);
+    throw error;
+  }
+};
