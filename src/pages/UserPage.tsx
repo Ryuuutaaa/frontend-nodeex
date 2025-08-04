@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getAllUseres } from "../services/userServices";
 
 interface User {
   id: string;
@@ -24,6 +25,31 @@ const UserPage: React.FC = () => {
   });
 
   const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await getAllUseres();
+        setUsers(data);
+      } catch (err) {
+        setError(
+          err.message || "Terjadi kesalahan saat mengambil data pengguna."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const handlerNewUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewUser((prev) => ({
+      ...prev,
+      [name]: name === "age" ? parseInt(value) || 0 : value,
+    }));
+  };
 
   return <div>UserPage</div>;
 };
