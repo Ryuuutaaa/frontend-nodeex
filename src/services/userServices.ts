@@ -89,3 +89,22 @@ export const updateUserById = async (
     throw error;
   }
 };
+
+export const deleteUserById = async (id: string): Promise<string> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Gagal menghapus data pengguna");
+    }
+
+    const message = await response.text();
+    return message;
+  } catch (error) {
+    console.error("Error delete user by id", error);
+    throw error;
+  }
+};
