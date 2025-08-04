@@ -26,7 +26,7 @@ export const getAllUseres = async (): Promise<User[]> => {
   }
 };
 
-export const createUser = (user: Omit<User, "id">): Promise<string> => {
+export const createUser = async (user: Omit<User, "id">): Promise<string> => {
   try {
     const response = await fetch(API_BASE_URL, {
       method: "POST",
@@ -35,16 +35,15 @@ export const createUser = (user: Omit<User, "id">): Promise<string> => {
       },
       body: JSON.stringify(user),
     });
-
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || "Gagal menambahkan pengguna");
     }
-
-    const message = await response.json();
+    // API backend Anda mengembalikan string pesan sukses, bukan JSON
+    const message = await response.text(); // Menggunakan .text() karena responsnya string
     return message;
-  } catch (erorr) {
-    console.error("Error createing user : ", erorr);
+  } catch (error) {
+    console.error("Error creating user:", error);
     throw error;
   }
 };
