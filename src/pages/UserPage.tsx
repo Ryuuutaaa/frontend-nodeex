@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface User {
   id: string;
@@ -13,7 +13,18 @@ interface newUser {
   age: number;
 }
 
-const UserPage = () => {
+const UserPage: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [newUser, setNewUser] = useState<newUser>({
+    firstsname: "",
+    lastname: "",
+    age: 0,
+  });
+
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
   return <div>UserPage</div>;
 };
 
