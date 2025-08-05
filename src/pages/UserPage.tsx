@@ -94,6 +94,23 @@ const UserPage: React.FC = () => {
     }
   };
 
+  const handleEditClick = (user: User) => {
+    setEditingUser({ ...user });
+  };
+
+  const handleEditingUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setEditingUser((prev) =>
+      prev
+        ? {
+            ...prev,
+            [name]: name === "age" ? parseInt(value) || 0 : value,
+          }
+        : null
+    );
+  };
+
   return <div>UserPage</div>;
 };
 
