@@ -111,6 +111,45 @@ const UserPage: React.FC = () => {
     );
   };
 
+  const hanldeUpdateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (
+      !editingUser ||
+      !editingUser.id ||
+      !editingUser.firstsname ||
+      !editingUser.lastname ||
+      !editingUser.age <= 0
+    ) {
+      return alert("Mohone mengelengkapi data pengguna dengan benar");
+    }
+    try {
+      setLoading(true);
+    } catch (err) {
+      setError(err.message || "Gagal memperbarui data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancalEdit = () => {
+    setEditingUser(null);
+  };
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", padding: "20px" }}>
+        Memuat data pengguna...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ color: "red", textAlign: "center", padding: "20px" }}>
+        Error: {error}
+      </div>
+    );
+  }
   return <div>UserPage</div>;
 };
 
